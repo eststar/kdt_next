@@ -13,7 +13,7 @@ interface TailBallProps {
 export default function TailBall({lottoNum} : TailBallProps) {
     
   return (
-    <div className={`h-20 w-20 rounded-full ${lottoNum && ballColor[Math.floor(lottoNum/10)]} text-xl font-bold  flex justify-center items-center`}>
+    <div className={`h-20 w-20 rounded-full  ${lottoNum && ballColor[Math.floor(lottoNum/10)]} text-xl font-bold  flex justify-center items-center`}>
       {(lottoNum == 50)? '+' : lottoNum}
     </div>
   )

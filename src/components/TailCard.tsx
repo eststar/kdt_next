@@ -26,7 +26,7 @@ export default function TailCard({url, title, subtitle, infos } : TailCardProps)
         <h2 className="text-lg font-bold">{title}</h2>
         <p className="tracking-tight">{subtitle}</p>
       </div>
-      <div className="p-5 flex flex-wrap gap-2">
+      <div className="p-5 flex flex-wrap gap-2 text-gray-800">
         {keyTags()}
       </div>
     </div>

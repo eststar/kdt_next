@@ -1,0 +1,96 @@
+"use client"
+import { useEffect, useState } from "react";
+
+import TodoInput from "./TodoInput";
+import TodoItem from "./TodoItem";
+
+import { supabase } from "@/supabase/client";
+
+import type { TodoData } from "./todoType";
+
+export default function TodoList () {
+    const [todos, setTodos] = useState<TodoData[]>([]);
+    const [todoCnt, setTodoCnt] = useState(0);
+    const [todoInComp, setTodoInComp] = useState(0);
+    const [todoComp, setTodoComp] = useState(0);
+    const [todoList, setTodoList] = useState<React.ReactElement[]>();
+
+    const getTodos = async () => {
+        const { data, error } = await supabase
+            .from('todos')
+            .select('*')
+            .order('id', { ascending: false });
+
+        if (error) {
+            console.error('Error fetching todos:', error);
+        } else {
+            setTodos(data);
+        }
+    };
+
+    const postTodo = async (newData : TodoData) : Promise<number>=> {
+        const { error } = await supabase
+            .from('todos')
+            .insert([
+                { text: newData.text, completed: newData.completed },
+            ]);
+        if (error) {
+            console.error('Error adding todo:', error);
+            return 0;
+        } else {
+            getTodos();
+            return 1;
+        }
+    };
+
+    const patchTodo = async (newData : TodoData) => {
+        const { error } = await supabase
+            .from('todos')
+            .update({ text: newData.text, completed: newData.completed })
+            .eq('id', newData.id);
+        if (error) {
+            console.error('Error toggling todo:', error);
+        } else
+            getTodos();
+    };
+
+    const deleteTodo = async (newData : TodoData) => {
+        const { error } = await supabase
+            .from('todos')
+            .delete()
+            .eq('id', newData.id);
+        if (error) {
+            console.error('Error deleting todo:', error);
+        } else {
+            getTodos();
+        }
+    };
+
+    useEffect(() => {
+        getTodos();
+    }, []);
+
+    useEffect(() => {
+        setTodoCnt(todos.length);
+        setTodoComp(todos.filter(el => el.completed == true).length);
+        setTodoInComp(todos.filter(el => el.completed == false).length);
+
+        setTodoList(
+            todos.map((item) =>
+                <TodoItem key={item.id} curData={item} handleEdit={patchTodo} handleDelete={deleteTodo} />)
+        );
+    }, [todos]);
+
+    return (
+        <div className="mx-auto w-7/10 flex flex-col justify-center items-center gap-4">
+            <h1 className="text-3xl font-bold mt-10">할일목록(Supabase)</h1>
+            <div className="bg-purple-200 rounded w-full h-100px p-5 text-rose-950">
+                전체 : {todoCnt} 개 | 완료 : {todoComp} 개 | 미완료 : {todoInComp} 개
+            </div>
+            <TodoInput handleSave={postTodo} />
+            <div className="w-full flex flex-col justify-center items-center gap-2">
+                {todoList}
+            </div>
+        </div>
+    )
+}
