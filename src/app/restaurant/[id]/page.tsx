@@ -20,8 +20,8 @@ export default async function RestaurantDetailPage({ params }: RestaurantDetailP
             <p className="text-gray-400">{Info.GUGUN_NM}</p>
             <div className="relative w-1/2 h-1/2">
             {
-                Info &&
-                <Image src={Info.MAIN_IMG_NORMAL || "/no_image.png"} alt={Info.TITLE} style={{objectFit : "cover"}} fill priority />
+                Info.MAIN_IMG_NORMAL && 
+                <Image src={Info.MAIN_IMG_NORMAL} alt={Info.TITLE} style={{objectFit : "cover"}} fill priority />
             }
             </div>
             <div className="grid grid-cols-2">
@@ -42,8 +42,8 @@ export default async function RestaurantDetailPage({ params }: RestaurantDetailP
             <div>
                 <h3>관련링크</h3>
                 <div>
-                    <div className="bg-gray-700 p-2 rounded">홈페이지</div>
-                    <div className="bg-yellow-400 p-2 rounded">카카오맵으로 보기</div>
+                    <div className="bg-gray-700 px-2 py-1 rounded text-white">홈페이지</div>
+                    <div className="bg-yellow-400 px-2 py-1 rounded">카카오맵으로 보기</div>
                 </div>
                 <h3>상세설명</h3>
                 <p></p>
