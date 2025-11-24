@@ -20,6 +20,8 @@ export default function Header() {
                             <Link href="/festival">부산 축제 정보</Link></li>                        
                         <li className='hover:text-lg font-bold cursor-pointer'>
                             <Link href="/todolist">할 일 목록</Link></li>
+                        <li className='hover:text-lg font-bold cursor-pointer'>
+                            <Link href="/restaurant">맛집 목록</Link></li>
                         </>
                     }
                 </ul>

@@ -10,8 +10,8 @@ export default function App01Layout({
                 <nav>
                     <ul className="gap-5 font-bold">
                         <li><Link href={"/app01/junggu"}>중구</Link></li>
-                        <li>금정구</li>
-                        <li>부산진구</li>
+                        <li><Link href={"/app01/dongnae"}>동래</Link></li>
+                        <li><Link href={"/app01/jingu"}>부산진구</Link></li>
                         <li></li>
                         <li></li>
                     </ul>
