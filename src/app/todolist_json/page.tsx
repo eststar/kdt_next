@@ -14,7 +14,7 @@ export default function TodoList() {
     const [todoComp, setTodoComp] = useState(0);
     const [todoList, setTodoList] = useState<React.ReactElement[]>();
 
-    const getFetchData = async () => {
+    const getData = async () => {
         const url = `${baseUrl}`;
         try {
             const resp = await fetch(url, { method: 'GET' });
@@ -25,7 +25,19 @@ export default function TodoList() {
         }
     };
 
-    const postFetchData = async (newData: TodoData): Promise<number> => {
+    const getDataById = async (id: number) => {
+        const url = `${baseUrl}?id=${id}`;
+        let data: TodoData | null = null;
+        try {
+            const resp = await fetch(url, { method: 'GET' });
+            data = await resp.json();
+        } catch (error) {
+            console.log(error);
+        }
+        return data;
+    };
+
+    const postData = async (newData: TodoData): Promise<number> => {
         const id = Number(new Date());
         const url = baseUrl;
 
@@ -43,17 +55,17 @@ export default function TodoList() {
             console.log(error);
             return 0;
         }
-        getFetchData();
+        getData();
         return 1;
     };
 
-    const patchTodo = async (newData: TodoData) => {
+    const putTodo = async (newData: TodoData) => {
 
-        const url = baseUrl + `?id=${newData.id}`;
+        const url = `${baseUrl}?id=${newData.id}`;
 
         try {
             const resp = await fetch(`${url}`, {
-                method: 'PATCH',
+                method: 'PUT',
                 headers: {
                     'Content-type': 'application/json'
                 },
@@ -62,6 +74,35 @@ export default function TodoList() {
         } catch (error) {
             console.log(error);
         }
+    };
+
+
+    const patchTodo = async (newData: TodoData) => {
+
+        const url = `${baseUrl}?id=${newData.id}`;
+        let targetdata: TodoData | null = null;
+        try {
+            const resp = await fetch(url, { method: 'GET' });
+            targetdata = await resp.json();
+        } catch (error) {
+            console.log(error);
+        }
+        if (targetdata) {
+            targetdata = {... targetdata, ...newData};
+            try {
+                const resp = await fetch(`${url}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: targetdata.text, completed: targetdata.completed })
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        else
+            console.log("해당 데이터가 없음");
     };
 
     const deleteTodo = async (newData: TodoData) => {
@@ -91,7 +132,7 @@ export default function TodoList() {
 
     useEffect(() => {
         // getTodos();
-        getFetchData();
+        getData();
     }, []);
 
     useEffect(() => {
@@ -111,7 +152,7 @@ export default function TodoList() {
             <div className="bg-purple-200 rounded w-full h-100px p-5 text-rose-950">
                 전체 : {todoCnt} 개 | 완료 : {todoComp} 개 | 미완료 : {todoInComp} 개
             </div>
-            <TodoInput handleSave={postFetchData} />
+            <TodoInput handleSave={postData} />
             <div className="w-full flex flex-col justify-center items-center gap-2">
                 {todoList}
             </div>
