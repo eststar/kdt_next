@@ -88,7 +88,7 @@ export default function TodoList() {
             console.log(error);
         }
         if (targetdata) {
-            targetdata = {... targetdata, ...newData};
+            targetdata = { ...targetdata, ...newData };
             try {
                 const resp = await fetch(`${url}`, {
                     method: 'PATCH',
@@ -106,32 +106,19 @@ export default function TodoList() {
     };
 
     const deleteTodo = async (newData: TodoData) => {
-        // const resp = await fetch(`${baseURL}${restAPILine}?id=eq.${newData.id}`, {
-        //     method : 'DELETE',
-        //     headers : {
-        //         'Apikey' : supabaseAPIKey,
-        //         'Authorization' : `Bearer ${supabaseAPIKey}`,
-        //     }
-        // });
+        const url = `${baseUrl}?id=${newData.id}`;
 
-        // if(resp.ok)
-        //     getTodos();
-        // else
-        //     console.error('Error patching todos: ', resp.statusText);
+        try {
+            const resp = await fetch(url, {
+                method: 'DELETE',
+            });
+        } catch (error) {
+            console.log(error);
+        }
 
-        // const { error } = await supabase
-        //     .from('todos')
-        //     .delete()
-        //     .eq('id', newData.id);
-        // if (error) {
-        //     console.error('Error deleting todo:', error);
-        // } else {
-        //     getFetchData();
-        // }
     };
 
     useEffect(() => {
-        // getTodos();
         getData();
     }, []);
 
