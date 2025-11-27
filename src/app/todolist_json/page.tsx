@@ -25,17 +25,17 @@ export default function TodoList() {
         }
     };
 
-    const getDataById = async (id: number) => {
-        const url = `${baseUrl}?id=${id}`;
-        let data: TodoData | null = null;
-        try {
-            const resp = await fetch(url, { method: 'GET' });
-            data = await resp.json();
-        } catch (error) {
-            console.log(error);
-        }
-        return data;
-    };
+    // const getDataById = async (id: number) => {
+    //     const url = `${baseUrl}?id=${id}`;
+    //     let data: TodoData | null = null;
+    //     try {
+    //         const resp = await fetch(url, { method: 'GET' });
+    //         data = await resp.json();
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    //     return data;
+    // };
 
     const postData = async (newData: TodoData): Promise<number> => {
         const id = Number(new Date());
@@ -44,18 +44,19 @@ export default function TodoList() {
         try {
             const resp = await fetch(url,
                 {
-                    method: 'GET',
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id: id, text: newData.text, completed: newData.completed })
                 }
             );
-            const data = await resp.json();
-            setTodos(data);
+            await getData();
+            // const data = await resp.json();
+            // setTodos(data);
         } catch (error) {
             console.log(error);
             return 0;
         }
-        getData();
+        
         return 1;
     };
 
@@ -71,9 +72,11 @@ export default function TodoList() {
                 },
                 body: JSON.stringify({ text: newData.text, completed: newData.completed })
             });
+            await getData();
         } catch (error) {
             console.log(error);
         }
+        
     };
 
 
@@ -97,12 +100,14 @@ export default function TodoList() {
                     },
                     body: JSON.stringify({ text: targetdata.text, completed: targetdata.completed })
                 });
+                await getData();
             } catch (error) {
                 console.log(error);
             }
         }
         else
             console.log("해당 데이터가 없음");
+        
     };
 
     const deleteTodo = async (newData: TodoData) => {
@@ -112,10 +117,11 @@ export default function TodoList() {
             const resp = await fetch(url, {
                 method: 'DELETE',
             });
+            await getData();
         } catch (error) {
             console.log(error);
         }
-
+        
     };
 
     useEffect(() => {
