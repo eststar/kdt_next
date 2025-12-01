@@ -1,12 +1,23 @@
 import { NextResponse, NextRequest } from "next/server";
-import todoData from "@/data/todo.json"
+// import todoData from "@/data/todo.json"
 import type { TodoData } from "@/types/todoType"
 import fs from 'fs/promises';
 import path from 'path';
 
 const getFilePath = () => path.join(process.cwd(), 'src', 'data', 'todo.json');
 
+async function getData(): Promise<TodoData[]> {
+    const jsonData = await fs.readFile(getFilePath(), 'utf-8');
+    return JSON.parse(jsonData);
+}
+
+async function writeData(data: TodoData[]) {
+    const jsonData = JSON.stringify(data, null, 2);
+    await fs.writeFile(getFilePath(), jsonData, 'utf-8');
+}
+
 export async function GET(request: NextRequest) {
+    const todoData = await getData();
     const searchParams = new URL(request.url).searchParams;
     const id = searchParams.get("id");
 
@@ -22,16 +33,6 @@ export async function GET(request: NextRequest) {
     }
     else
         return NextResponse.json(todoData);
-}
-
-async function getData(): Promise<TodoData[]> {
-    const jsonData = await fs.readFile(getFilePath(), 'utf-8');
-    return JSON.parse(jsonData);
-}
-
-async function writeData(data: TodoData[]) {
-    const jsonData = JSON.stringify(data, null, 2);
-    await fs.writeFile(getFilePath(), jsonData, 'utf-8');
 }
 
 export async function POST(request: NextRequest) {

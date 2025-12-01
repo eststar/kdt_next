@@ -20,6 +20,7 @@ export default function TodoList() {
             const resp = await fetch(url, { method: 'GET' });
             const data = await resp.json();
             setTodos(data);
+
         } catch (error) {
             console.log(error);
         }
@@ -56,7 +57,7 @@ export default function TodoList() {
             console.log(error);
             return 0;
         }
-        
+
         return 1;
     };
 
@@ -76,38 +77,28 @@ export default function TodoList() {
         } catch (error) {
             console.log(error);
         }
-        
+
     };
 
 
     const patchTodo = async (newData: TodoData) => {
 
         const url = `${baseUrl}?id=${newData.id}`;
-        let targetdata: TodoData | null = null;
+
         try {
-            const resp = await fetch(url, { method: 'GET' });
-            targetdata = await resp.json();
+            const resp = await fetch(`${url}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ text: newData.text, completed: newData.completed })
+            });
+            await getData();
         } catch (error) {
             console.log(error);
         }
-        if (targetdata) {
-            targetdata = { ...targetdata, ...newData };
-            try {
-                const resp = await fetch(`${url}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-type': 'application/json'
-                    },
-                    body: JSON.stringify({ text: targetdata.text, completed: targetdata.completed })
-                });
-                await getData();
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        else
-            console.log("해당 데이터가 없음");
-        
+
+
     };
 
     const deleteTodo = async (newData: TodoData) => {
@@ -121,7 +112,7 @@ export default function TodoList() {
         } catch (error) {
             console.log(error);
         }
-        
+
     };
 
     useEffect(() => {
@@ -137,6 +128,7 @@ export default function TodoList() {
             todos.map((item) =>
                 <TodoItem key={item.id} curData={item} handleEdit={patchTodo} handleDelete={deleteTodo} />)
         );
+        console.log("겟");
     }, [todos]);
 
     return (
