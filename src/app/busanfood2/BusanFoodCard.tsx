@@ -7,14 +7,14 @@ interface RestaurantCard{
   data : RestaurantType,
 }
 
-export default function RestaurantCard({data} : RestaurantCard) {
+export default function BusanFoodCard({data} : RestaurantCard) {
   if(!data)
     return;
   return (
-    <Link href={`/restaurant/${data.UC_SEQ}`} className="w-full h-90 flex flex-col rounded-2xl border-2 border-gray-400 shadow-lg overflow-hidden">
+    <Link href={`/busanfood/${data.UC_SEQ}`} className="w-full h-90 flex flex-col rounded-2xl border-2 border-gray-400 shadow-lg overflow-hidden">
       <div className="relative w-full h-full">
         { 
-          <Image style={{objectFit : "cover"}} fill priority src={(data.MAIN_IMG_THUMB === "null" && "/no_image.jpg") || ( data.MAIN_IMG_THUMB || "/no_image.jpg")} alt={data.TITLE}
+          <Image style={{objectFit : "cover"}} fill priority src={data.MAIN_IMG_THUMB || "/no_image.jpg"} alt={data.TITLE}
              className="w-full h-full" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"/>
         }        
       </div>      

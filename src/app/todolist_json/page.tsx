@@ -77,7 +77,6 @@ export default function TodoList() {
         } catch (error) {
             console.log(error);
         }
-
     };
 
 
@@ -97,8 +96,6 @@ export default function TodoList() {
         } catch (error) {
             console.log(error);
         }
-
-
     };
 
     const deleteTodo = async (newData: TodoData) => {
@@ -112,7 +109,6 @@ export default function TodoList() {
         } catch (error) {
             console.log(error);
         }
-
     };
 
     useEffect(() => {
@@ -128,7 +124,7 @@ export default function TodoList() {
             todos.map((item) =>
                 <TodoItem key={item.id} curData={item} handleEdit={patchTodo} handleDelete={deleteTodo} />)
         );
-        console.log("겟");
+        
     }, [todos]);
 
     return (
